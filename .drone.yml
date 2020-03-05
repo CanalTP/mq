@@ -1,14 +1,14 @@
 workspace:
   base: /go
-  path: src/github.com/drone/mq
+  path: src/github.com/CanalTP/mq
 
 pipeline:
   test:
     image: golang:1.7.1-alpine
     commands:
-      - go install github.com/drone/mq/cmd/mq
-      - go test -cover -v github.com/drone/mq/stomp/...
-      - go test -cover -v github.com/drone/mq/server/...
+      - go install github.com/CanalTP/mq/cmd/mq
+      - go test -cover -v github.com/CanalTP/mq/stomp/...
+      - go test -cover -v github.com/CanalTP/mq/server/...
 
   build:
     image: golang:1.7.1-alpine
@@ -18,7 +18,7 @@ pipeline:
 
   docker:
     image: plugins/docker
-    repo: drone/mq
+    repo: CanalTP/mq
     tags: [ latest, 1, 1.0, 1.0.0 ]
     when:
       branch: master
@@ -26,7 +26,7 @@ pipeline:
 
   feature:
     image: plugins/docker
-    repo: drone/mq
+    repo: CanalTP/mq
     tags: [ 1.0.1 ]
     when:
       branch: feature/reconnect

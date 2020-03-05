@@ -6,7 +6,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/drone/mq/logger"
+	"github.com/CanalTP/mq/logger"
 )
 
 const (
@@ -123,7 +123,7 @@ loop:
 			break loop
 		case <-heartbeat:
 			logger.Verbosef("stomp: send heart-beat.")
-			c.writer.WriteByte(0)
+			c.writer.Write([]byte("\n"))
 		case <-tick:
 			c.conn.SetWriteDeadline(time.Now().Add(deadline))
 			if err := c.writer.Flush(); err != nil {

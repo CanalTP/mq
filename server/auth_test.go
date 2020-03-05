@@ -3,7 +3,7 @@ package server
 import (
 	"testing"
 
-	"github.com/drone/mq/stomp"
+	"github.com/CanalTP/mq/stomp"
 )
 
 func TestBasicAuth(t *testing.T) {

@@ -17,6 +17,7 @@ var (
 	MethodMessage     = []byte("MESSAGE")
 	MethodRecipet     = []byte("RECEIPT")
 	MethodError       = []byte("ERROR")
+	MethodPing        = []byte("PING")
 )
 
 // STOMP protocol headers.
@@ -74,3 +75,4 @@ var headerLookup = map[string]struct{}{
 	"subscription":   struct{}{},
 	"version":        struct{}{},
 }
+

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/drone/mq/stomp"
+	"github.com/CanalTP/mq/stomp"
 )
 
 func TestAck(t *testing.T) {

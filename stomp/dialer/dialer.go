@@ -43,7 +43,7 @@ func dialWebsocket(target *url.URL) (net.Conn, error) {
 	case protoWSS:
 		origin.Scheme = protoHTTPS
 	}
-	return websocket.Dial(target.String(), "", origin.String())
+	return websocket.Dial(target.String(), "stomp", origin.String())
 }
 
 func dialSocket(target *url.URL) (net.Conn, error) {

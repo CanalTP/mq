@@ -13,11 +13,11 @@ var (
 )
 
 func writeTo(w io.Writer, m *Message) {
-	w.Write(m.Method)
-	w.Write(newline)
-
+	cont := true
 	switch {
 	case bytes.Equal(m.Method, MethodStomp):
+		w.Write(m.Method)
+		w.Write(newline)
 		// version
 		w.Write(HeaderAccept)
 		w.Write(separator)
@@ -38,36 +38,46 @@ func writeTo(w io.Writer, m *Message) {
 			w.Write(newline)
 		}
 	case bytes.Equal(m.Method, MethodConnected):
+		w.Write(m.Method)
+		w.Write(newline)
 		// version
 		w.Write(HeaderVersion)
 		w.Write(separator)
 		w.Write(m.Proto)
 		w.Write(newline)
 	case bytes.Equal(m.Method, MethodSend):
-		// dest
-		w.Write(HeaderDest)
-		w.Write(separator)
-		w.Write(m.Dest)
+		w.Write(m.Method)
 		w.Write(newline)
-		if len(m.Expires) != 0 {
-			w.Write(HeaderExpires)
+		if m != nil {
+			// dest
+			w.Write(HeaderDest)
 			w.Write(separator)
-			w.Write(m.Expires)
+			w.Write(m.Dest)
 			w.Write(newline)
-		}
-		if len(m.Retain) != 0 {
-			w.Write(HeaderRetain)
-			w.Write(separator)
-			w.Write(m.Retain)
-			w.Write(newline)
-		}
-		if len(m.Persist) != 0 {
-			w.Write(HeaderPersist)
-			w.Write(separator)
-			w.Write(m.Persist)
+			if len(m.Expires) != 0 {
+				w.Write(HeaderExpires)
+				w.Write(separator)
+				w.Write(m.Expires)
+				w.Write(newline)
+			}
+			if len(m.Retain) != 0 {
+				w.Write(HeaderRetain)
+				w.Write(separator)
+				w.Write(m.Retain)
+				w.Write(newline)
+			}
+			if len(m.Persist) != 0 {
+				w.Write(HeaderPersist)
+				w.Write(separator)
+				w.Write(m.Persist)
+				w.Write(newline)
+			}
+		} else {
 			w.Write(newline)
 		}
 	case bytes.Equal(m.Method, MethodSubscribe):
+		w.Write(m.Method)
+		w.Write(newline)
 		// id
 		w.Write(HeaderID)
 		w.Write(separator)
@@ -99,24 +109,32 @@ func writeTo(w io.Writer, m *Message) {
 			w.Write(newline)
 		}
 	case bytes.Equal(m.Method, MethodUnsubscribe):
+		w.Write(m.Method)
+		w.Write(newline)
 		// id
 		w.Write(HeaderID)
 		w.Write(separator)
 		w.Write(m.ID)
 		w.Write(newline)
 	case bytes.Equal(m.Method, MethodAck):
+		w.Write(m.Method)
+		w.Write(newline)
 		// id
 		w.Write(HeaderID)
 		w.Write(separator)
 		w.Write(m.ID)
 		w.Write(newline)
 	case bytes.Equal(m.Method, MethodNack):
+		w.Write(m.Method)
+		w.Write(newline)
 		// id
 		w.Write(HeaderID)
 		w.Write(separator)
 		w.Write(m.ID)
 		w.Write(newline)
 	case bytes.Equal(m.Method, MethodMessage):
+		w.Write(m.Method)
+		w.Write(newline)
 		// message-id
 		w.Write(HeaderMessageID)
 		w.Write(separator)
@@ -140,32 +158,40 @@ func writeTo(w io.Writer, m *Message) {
 			w.Write(newline)
 		}
 	case bytes.Equal(m.Method, MethodRecipet):
+		w.Write(m.Method)
+		w.Write(newline)
 		// receipt-id
 		w.Write(HeaderReceiptID)
 		w.Write(separator)
 		w.Write(m.Receipt)
 		w.Write(newline)
+	case bytes.Equal(m.Method, MethodPing):
+		//w.Write(MethodSend)
+		w.Write(crlf)
+		cont = false
 	}
-
-	// receipt header
-	if includeReceiptHeader(m) {
-		w.Write(HeaderReceipt)
-		w.Write(separator)
-		w.Write(m.Receipt)
-		w.Write(newline)
-	}
-
-	for i, item := range m.Header.items {
-		if m.Header.itemc == i {
-			break
+	if cont {
+		// receipt header
+		if includeReceiptHeader(m) {
+			w.Write(HeaderReceipt)
+			w.Write(separator)
+			w.Write(m.Receipt)
+			w.Write(newline)
 		}
-		w.Write(item.name)
-		w.Write(separator)
-		w.Write(item.data)
+
+		for i, item := range m.Header.items {
+			if m.Header.itemc == i {
+				break
+			}
+			w.Write(item.name)
+			w.Write(separator)
+			w.Write(item.data)
+			w.Write(newline)
+		}
 		w.Write(newline)
+		w.Write(m.Body)
 	}
-	w.Write(newline)
-	w.Write(m.Body)
+
 }
 
 func includeReceiptHeader(m *Message) bool {

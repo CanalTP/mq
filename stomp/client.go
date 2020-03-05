@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/drone/mq/logger"
-	"github.com/drone/mq/stomp/dialer"
+	"github.com/CanalTP/mq/logger"
+	"github.com/CanalTP/mq/stomp/dialer"
 )
 
 // Client defines a client connection to a STOMP server.
@@ -236,6 +236,9 @@ func (c *Client) handleMessage(m *Message) {
 }
 
 func (c *Client) sendMessage(m *Message) error {
+	if m == nil {
+		return c.peer.Send(m)
+	}
 	if len(m.Receipt) == 0 {
 		return c.peer.Send(m)
 	}

@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/drone/mq/logger"
-	"github.com/drone/mq/stomp"
+	"github.com/CanalTP/mq/logger"
+	"github.com/CanalTP/mq/stomp"
 
 	"github.com/tidwall/redlog"
 	"github.com/urfave/cli"

@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"regexp"
 
-	"github.com/drone/mq/stomp/selector/parse"
+	"github.com/CanalTP/mq/stomp/selector/parse"
 )
 
 // state represents the state of an execution. It's not part of the
